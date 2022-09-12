@@ -1,16 +1,14 @@
 package br.edu.unidep.project.entities;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -43,13 +41,14 @@ public class Produto implements Serializable{
 	@JoinColumn(name="marca_id")
 	private Marca marca;
 
-	
-	@OneToMany(cascade=CascadeType.ALL)
-	@JoinTable(name="tb_produto_lote",  joinColumns = {@JoinColumn(name="codigo_produto")}, inverseJoinColumns = {@JoinColumn(name="codigo_lote")})
+	@OneToMany(mappedBy="codigoProduto")
 	private List<Lote> lotes;
 	
+	@Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
+	private boolean usaControleDeLote;
 	private String codigoReferencia;
 	private String codigoBarras;
+	private Double quantidade;
 	private Double custoAquisicao;
 	private Double precoVenda;
 	
@@ -57,7 +56,8 @@ public class Produto implements Serializable{
 	}
 
 	public Produto(Integer codigoProduto, String descricao, Categoria categoria, Grupo grupo, Departamento departamento,
-			Marca marca, String codigoReferencia, String codigoBarras, Double custoAquisicao, Double precoVenda) {
+			Marca marca, boolean usaControleDeLote, String codigoReferencia, String codigoBarras, Double quantidade,
+			Double custoAquisicao, Double precoVenda) {
 		super();
 		this.codigoProduto = codigoProduto;
 		this.descricao = descricao;
@@ -65,8 +65,10 @@ public class Produto implements Serializable{
 		this.grupo = grupo;
 		this.departamento = departamento;
 		this.marca = marca;
+		this.usaControleDeLote = usaControleDeLote;
 		this.codigoReferencia = codigoReferencia;
 		this.codigoBarras = codigoBarras;
+		this.quantidade = quantidade;
 		this.custoAquisicao = custoAquisicao;
 		this.precoVenda = precoVenda;
 	}
@@ -127,6 +129,14 @@ public class Produto implements Serializable{
 		this.lotes = lotes;
 	}
 
+	public boolean isUsaControleDeLote() {
+		return usaControleDeLote;
+	}
+
+	public void setUsaControleDeLote(boolean usaControleDeLote) {
+		this.usaControleDeLote = usaControleDeLote;
+	}
+
 	public String getCodigoReferencia() {
 		return codigoReferencia;
 	}
@@ -143,6 +153,14 @@ public class Produto implements Serializable{
 		this.codigoBarras = codigoBarras;
 	}
 
+	public Double getQuantidade() {
+		return quantidade;
+	}
+
+	public void setQuantidade(Double quantidade) {
+		this.quantidade = quantidade;
+	}
+
 	public Double getCustoAquisicao() {
 		return custoAquisicao;
 	}
@@ -157,5 +175,5 @@ public class Produto implements Serializable{
 
 	public void setPrecoVenda(Double precoVenda) {
 		this.precoVenda = precoVenda;
-	}	
+	}
 }

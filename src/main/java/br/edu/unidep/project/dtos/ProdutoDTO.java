@@ -15,6 +15,8 @@ public class ProdutoDTO implements Serializable {
 	private Integer codigoGrupo;
 	private Integer codigoDepartamento;
 	private Integer codigoMarca;
+	private boolean usaControleDeLote;
+	private Double quantidade;
 	private String codigoReferencia;
 	private String codigoBarras;
 	private Double custoAquisicao;
@@ -24,8 +26,9 @@ public class ProdutoDTO implements Serializable {
 		super();
 	}
 
-	public ProdutoDTO(Integer codigoProduto, String descricao, Integer codigoCategoria, Integer codigoGrupo, Integer codigoDepartamento,
-			Integer codigoMarca, String codigoReferencia, String codigoBarras, Double custoAquisicao, Double precoVenda) {
+	public ProdutoDTO(Integer codigoProduto, String descricao, Integer codigoCategoria, Integer codigoGrupo,
+			Integer codigoDepartamento, Integer codigoMarca, boolean usaControleDeLote, Double quantidade,
+			String codigoReferencia, String codigoBarras, Double custoAquisicao, Double precoVenda) {
 		super();
 		this.codigoProduto = codigoProduto;
 		this.descricao = descricao;
@@ -33,12 +36,15 @@ public class ProdutoDTO implements Serializable {
 		this.codigoGrupo = codigoGrupo;
 		this.codigoDepartamento = codigoDepartamento;
 		this.codigoMarca = codigoMarca;
+		this.usaControleDeLote = usaControleDeLote;
+		this.quantidade = quantidade;
 		this.codigoReferencia = codigoReferencia;
 		this.codigoBarras = codigoBarras;
 		this.custoAquisicao = custoAquisicao;
 		this.precoVenda = precoVenda;
 	}
 
+	
 	public ProdutoDTO(Produto produto) {
 		this.codigoProduto = produto.getCodigoProduto();
 		this.descricao = produto.getDescricao();
@@ -46,6 +52,8 @@ public class ProdutoDTO implements Serializable {
 		this.codigoGrupo = produto.getGrupo().getCodigoGrupo();
 		this.codigoDepartamento = produto.getDepartamento().getCodigoDepartamento();
 		this.codigoMarca = produto.getMarca().getCodigoMarca();
+		this.usaControleDeLote = produto.isUsaControleDeLote();
+		this.quantidade = produto.getQuantidade();
 		this.codigoReferencia = produto.getCodigoReferencia();
 		this.codigoBarras = produto.getCodigoBarras();
 		this.custoAquisicao = produto.getCustoAquisicao();
@@ -131,4 +139,21 @@ public class ProdutoDTO implements Serializable {
 	public void setPrecoVenda(Double precoVenda) {
 		this.precoVenda = precoVenda;
 	}
+
+	public boolean isUsaControleDeLote() {
+		return usaControleDeLote;
+	}
+
+	public void setUsaControleDeLote(boolean usaControleDeLote) {
+		this.usaControleDeLote = usaControleDeLote;
+	}
+
+	public Double getQuantidade() {
+		return quantidade;
+	}
+
+	public void setQuantidade(Double quantidade) {
+		this.quantidade = quantidade;
+	}
+	
 }

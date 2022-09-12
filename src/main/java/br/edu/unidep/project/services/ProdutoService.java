@@ -7,6 +7,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.edu.unidep.project.dtos.ProdutoDTO;
 import br.edu.unidep.project.entities.Categoria;
@@ -67,12 +68,25 @@ public class ProdutoService {
 	
 	private Produto aPartirDTO(ProdutoDTO produtoDTO) {
 		
+		double quant = 0;
+		
 		Produto prod = new Produto();
 		prod.setDescricao(produtoDTO.getDescricao());
 		prod.setCodigoReferencia(produtoDTO.getCodigoReferencia());
 		prod.setCodigoBarras(produtoDTO.getCodigoBarras());
 		prod.setCustoAquisicao(produtoDTO.getCustoAquisicao());
 		prod.setPrecoVenda(produtoDTO.getPrecoVenda());
+		prod.setUsaControleDeLote(produtoDTO.isUsaControleDeLote());
+		
+		if (produtoDTO.isUsaControleDeLote() == true) {
+			if (prod.getLotes() == null || prod.getLotes().isEmpty()) {
+				prod.setQuantidade(0.0);
+			}
+		}
+		else {
+			prod.setQuantidade(produtoDTO.getQuantidade());
+		}
+		
 		
 		Categoria categoria = categoriaService.buscarCategoria(produtoDTO.getCodigoCategoria());
 		Grupo grupo = grupoService.buscarGrupo(produtoDTO.getCodigoGrupo());
@@ -83,6 +97,8 @@ public class ProdutoService {
 		prod.setGrupo(grupo);
 		prod.setDepartamento(departamento);
 		prod.setMarca(marca);
+		
+		
 		
 		return produtoRepository.save(prod);
 	}

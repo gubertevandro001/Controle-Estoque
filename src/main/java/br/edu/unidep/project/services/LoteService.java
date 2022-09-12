@@ -3,6 +3,7 @@ package br.edu.unidep.project.services;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import br.edu.unidep.project.dtos.LoteDTO;
 import br.edu.unidep.project.entities.Lote;
 import br.edu.unidep.project.entities.Produto;
 import br.edu.unidep.project.repositorys.LoteRepository;
+import br.edu.unidep.project.repositorys.ProdutoRepository;
 import br.edu.unidep.project.services.exceptions.DataIntegratyViolationException;
 
 @Service
@@ -23,7 +25,9 @@ public class LoteService {
 	@Autowired
 	private ProdutoService produtoService;
 	
-	
+	@Autowired
+	private ProdutoRepository produtoRepository;
+
 	public Lote buscarLote(Integer id) {
 		Optional<Lote> lote = loteRepository.findById(id);
 		return lote.get();
@@ -33,6 +37,7 @@ public class LoteService {
 		return loteRepository.findAll();
 	}
 	
+	@Transactional
 	public Lote cadastrarLote(@Valid LoteDTO loteDTO) {
 		return aPartirDTO(loteDTO);
 	}
@@ -43,6 +48,8 @@ public class LoteService {
 	
 	private Lote aPartirDTO(LoteDTO loteDTO) {
 		
+		double quant = 0.0;
+		
 		Lote lote = new Lote();
 		
 		lote.setDescricao(loteDTO.getDescricao());
@@ -50,6 +57,19 @@ public class LoteService {
 		lote.setDataValidade(loteDTO.getDataValidade());
 		
 		Produto produto = produtoService.buscarProduto(loteDTO.getCodigoProduto());
+		
+		if (produto.isUsaControleDeLote() == true) {
+			if (produto.getLotes() == null || produto.getLotes().isEmpty()) {
+				lote.setQuantidade(loteDTO.getQuantidade());
+				produtoRepository.ajustarQuantidadeLotesProduto(loteDTO.getQuantidade(), produto.getCodigoProduto());
+			}
+			else {
+				for (Lote loti : produto.getLotes()) {
+					quant += lote.getQuantidade();
+					produtoRepository.ajustarQuantidadeLotesProduto((quant + loteDTO.getQuantidade()), produto.getCodigoProduto());
+				}
+			}
+		}
 		
 		lote.setProduto(produto);
 		
@@ -63,9 +83,8 @@ public class LoteService {
 		
 		if (lote != null && loteDTO.getCodigoLote() == lote.getCodigoLote()) {
 			
-			lote.setCodigoLote(loteDTO.getCodigoLote());
+			
 			lote.setDescricao(loteDTO.getDescricao());
-			lote.setQuantidade(loteDTO.getQuantidade());
 			lote.setDataValidade(loteDTO.getDataValidade());
 			
 			Produto produto = produtoService.buscarProduto(loteDTO.getCodigoProduto());

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.edu.unidep.project.dtos.LoteDTO;
+import br.edu.unidep.project.dtos.ProdutoLoteDTO;
 import br.edu.unidep.project.services.LoteService;
 
 @RestController
@@ -25,6 +26,9 @@ public class LoteController {
 	
 	@Autowired
 	private LoteService loteService;
+	
+	@Autowired
+	private ProdutoLoteController produtoLoteController;
 	
 	@GetMapping(value="/{id}")
 	public ResponseEntity<LoteDTO> buscarLote(@PathVariable Integer id) {
@@ -39,10 +43,12 @@ public class LoteController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<LoteDTO> cadastrarLote(@Valid @RequestBody LoteDTO loteDTO) {
+	public ResponseEntity<LoteDTO> cadastrarLote(@RequestBody LoteDTO loteDTO) {
 		LoteDTO ltDTO = new LoteDTO(loteService.cadastrarLote(loteDTO));
+		produtoLoteController.salvarProdutoLote(new ProdutoLoteDTO(ltDTO.getCodigoProduto(), ltDTO.getCodigoLote()));
 		return ResponseEntity.ok().body(ltDTO);
 	}
+	
 	
 	@PutMapping(value="/{id}")
 	public ResponseEntity<LoteDTO> editarLote(@Valid @PathVariable Integer id, @RequestBody LoteDTO loteDTO) {

@@ -18,10 +18,8 @@ import javax.persistence.Table;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
 
-
-
 @Entity
-@Table(name = "tb_lote")
+@Table(name ="tb_lote")
 public class Lote implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -33,7 +31,7 @@ public class Lote implements Serializable {
 	
 	
 	@ManyToOne
-	@JoinColumn(name="codigo_produto", nullable = true)
+	@JoinColumn(name="codigo_produto")
 	private Produto codigoProduto;
 	
 	
@@ -41,10 +39,6 @@ public class Lote implements Serializable {
 	
 	@DateTimeFormat(pattern="dd/MM/yyyy")
 	private Date dataValidade;
-	
-	@ManyToOne(cascade=CascadeType.ALL)
-	@JoinTable(name="tb_produto_lote", joinColumns = {@JoinColumn(name="codigo_lote")}, inverseJoinColumns = {@JoinColumn(name="codigo_produto")})
-	private Produto produtoLote;
 	
 
 	public Lote() {
@@ -66,7 +60,7 @@ public class Lote implements Serializable {
 	public void setCodigoLote(Integer codigoLote) {
 		this.codigoLote = codigoLote;
 	}
-
+    
 	public String getDescricao() {
 		return descricao;
 	}
@@ -97,13 +91,5 @@ public class Lote implements Serializable {
 	
 	public void setDataValidade(Date dataValidade) {
 		this.dataValidade = dataValidade;
-	}
-
-	public Produto getProdutoLote() {
-		return produtoLote;
-	}
-
-	public void setProdutoLote(Produto produtoLote) {
-		this.produtoLote = produtoLote;
 	}
 }
