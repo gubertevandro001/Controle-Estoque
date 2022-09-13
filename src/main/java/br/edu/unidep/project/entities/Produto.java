@@ -48,6 +48,7 @@ public class Produto implements Serializable{
 	private boolean usaControleDeLote;
 	private String codigoReferencia;
 	private String codigoBarras;
+	@Column(updatable = false)
 	private Double quantidade;
 	private Double custoAquisicao;
 	private Double precoVenda;

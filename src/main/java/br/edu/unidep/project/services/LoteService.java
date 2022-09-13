@@ -77,12 +77,12 @@ public class LoteService {
 		
 	}
 	
+	@Transactional
 	private Lote updateLoteFromDTO(@Valid Integer id, LoteDTO loteDTO) {
 		
 		Lote lote = buscarLote(id);
 		
 		if (lote != null && loteDTO.getCodigoLote() == lote.getCodigoLote()) {
-			
 			
 			lote.setDescricao(loteDTO.getDescricao());
 			lote.setDataValidade(loteDTO.getDataValidade());
@@ -90,6 +90,14 @@ public class LoteService {
 			Produto produto = produtoService.buscarProduto(loteDTO.getCodigoProduto());
 			
 			lote.setProduto(produto);
+			
+			if (produto.isUsaControleDeLote() == true) {
+				produtoRepository.ajustarQuantidadeLotesProduto((produto.getQuantidade()) - (lote.getQuantidade() - loteDTO.getQuantidade()), produto.getCodigoProduto());
+				lote.setQuantidade(loteDTO.getQuantidade());
+			}
+			
+			lote.setQuantidade(loteDTO.getQuantidade());
+			
 			
 			return loteRepository.save(lote);
 			
