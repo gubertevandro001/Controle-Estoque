@@ -8,8 +8,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "tb_estoque")
@@ -23,9 +27,13 @@ public class Estoque implements Serializable {
 	private Integer codigoEstoque;
 	private String descricao;
 	
-	@OneToMany(mappedBy="estoquePadrao")
+
+	@JsonIgnore
+	@ManyToMany
+    @JoinTable(name="tb_produto_estoque", joinColumns=
+    {@JoinColumn(name="estoque_id")}, inverseJoinColumns=
+    {@JoinColumn(name="produto_id")})
 	private List<Produto> produtos = new ArrayList<>();
-	
 	
 	public Estoque() {
 		super();

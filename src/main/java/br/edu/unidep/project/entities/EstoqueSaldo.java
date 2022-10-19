@@ -22,7 +22,7 @@ public class EstoqueSaldo implements Serializable {
 	}
 
 	public EstoqueSaldo(Produto produto, Saldo saldo, Estoque estoque, Double quantidade) {
-		estoqueSaldoPK.setCodigoEstoque(estoque);
+		estoqueSaldoPK.setCodigoProduto(produto);
 		estoqueSaldoPK.setCodigoSaldo(saldo);
 		estoqueSaldoPK.setCodigoEstoque(estoque);
 		this.quantidade = quantidade;

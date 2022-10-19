@@ -10,14 +10,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
-
-import org.springframework.lang.Nullable;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="tb_produto")
@@ -47,7 +43,6 @@ public class Produto implements Serializable{
 	@JoinColumn(name="marca_id")
 	private Marca marca;
 
-	@JsonIgnore
 	@OneToMany(mappedBy="codigoProduto")
 	private List<Lote> lotes;
 	
@@ -55,8 +50,7 @@ public class Produto implements Serializable{
 	@JoinColumn(name="estoque_padrao_id")
 	private Estoque estoquePadrao;
 	
-	@Transient
-	@Nullable
+	@ManyToMany(mappedBy="produtos")
 	private List<Estoque> outrosEstoques = new ArrayList<>();
 	
 	@Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
@@ -215,5 +209,10 @@ public class Produto implements Serializable{
 	
 	public void adicionarEstoque(Estoque estoque) {
 		this.outrosEstoques.add(estoque);
+	}
+	
+	public void adicionarEstoquePadrao(Estoque estoque) {
+		List<Estoque> estoquePadrao = new ArrayList<>();
+		estoquePadrao.add(estoque);
 	}
 }

@@ -30,8 +30,8 @@ public class EstoqueService {
 		
 		Estoque estoque = new Estoque();
 		
-		estoque.setCodigoEstoque(estoque.getCodigoEstoque());
-		estoque.setDescricao(estoque.getDescricao());
+		estoque.setCodigoEstoque(estoqueDTO.getCodigoEstoque());
+		estoque.setDescricao(estoqueDTO.getDescricao());
 		
 		estoqueRepository.save(estoque);
 		

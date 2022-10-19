@@ -17,7 +17,7 @@ public class ResourceExceptionHandler {
 	
 	@ExceptionHandler(DataIntegrityViolationException.class)
 	public ResponseEntity<StandardError> dataIntegratyViolationException(DataIntegrityViolationException div) {
-		StandardError error = new StandardError(System.currentTimeMillis(), HttpStatus.CONFLICT.value(), "Ihuuul, Pau!");
+		StandardError error = new StandardError(System.currentTimeMillis(), HttpStatus.CONFLICT.value(), div.getMessage());
 		return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
 	}
 	

@@ -1,13 +1,11 @@
 package br.edu.unidep.project.controllers;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,12 +27,16 @@ public class ProdutoController {
 	@Autowired
 	private ProdutoService produtoService;
 	
+	@Autowired
+	private ProdutoEstoqueController produtoEstoqueController;
+	
 	
 	@GetMapping(value="/{id}")
 	public ResponseEntity<ProdutoDTO> buscarProduto(@PathVariable Integer id) {
-		ProdutoDTO produtoDTO = new ProdutoDTO(produtoService.buscarProduto(id));
+		ProdutoDTO produtoDTO = new ProdutoDTO(produtoService.buscarProdutoEstoques(id));
 		return ResponseEntity.ok().body(produtoDTO);
 	}
+
 	
 	@GetMapping
 	public ResponseEntity<List<ProdutoDTO>> mostrarProdutos() {

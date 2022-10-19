@@ -1,6 +1,7 @@
 package br.edu.unidep.project.dtos;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import br.edu.unidep.project.entities.Estoque;
@@ -18,7 +19,7 @@ public class ProdutoDTO implements Serializable {
 	private Integer codigoDepartamento;
 	private Integer codigoMarca;
 	private Integer codigoEstoquePadrao;
-	private List<Estoque> outrosEstoques;
+	private List<Estoque> outrosEstoques = new ArrayList<>();
 	private boolean usaControleDeLote;
 	private Double quantidade;
 	private String codigoReferencia;
